@@ -17,16 +17,13 @@ fn main() {
             Err(_) => continue,
         };
 
-        if device_desc.protocol_code() == 0
-            && device_desc.sub_class_code() == 0
-            && device_desc.class_code() == 0
-        {
-            list_devices(device, device_desc).unwrap();
+        if check_for_actual_usb(&device_desc) {
+            list_device(device, device_desc).unwrap();
         }
     }
 }
 
-fn list_devices(
+fn list_device(
     device: libusb::Device,
     device_desc: libusb::DeviceDescriptor,
 ) -> libusb::Result<()> {
@@ -233,4 +230,10 @@ fn get_speed(speed: libusb::Speed) -> &'static str {
         libusb::Speed::Low => " 1.5 Mbps",
         libusb::Speed::Unknown => "(unknown)",
     }
+}
+
+fn check_for_actual_usb(device_desc: &libusb::DeviceDescriptor) -> bool {
+    device_desc.protocol_code() == 0
+        && device_desc.sub_class_code() == 0
+        && device_desc.class_code() == 0
 }

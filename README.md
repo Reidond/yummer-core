@@ -1,1 +1,1 @@
-# yummer-core
+# yummer-sdk
